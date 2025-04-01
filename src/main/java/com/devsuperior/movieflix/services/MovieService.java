@@ -28,8 +28,8 @@ public class MovieService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<MovieCardDTO> findByGenre(Pageable pageable, Long genreId){
-		Page<Movie> result = repository.findByGenre(pageable, genreId);
+	public Page<MovieCardDTO> findByGenre(Pageable pageable, String genreId){
+		Page<Movie> result = repository.findByGenre(pageable, Long.parseLong(genreId));
 		return result.map(movie -> new MovieCardDTO(movie));
 	}
 }
