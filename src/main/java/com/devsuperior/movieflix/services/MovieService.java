@@ -32,12 +32,13 @@ public class MovieService {
 	@Transactional(readOnly = true)
 	public Page<MovieCardDTO> findByGenre(Pageable pageable, String genreId){
 		Long id = null;
-		if(!genreId.isBlank()) {
+		if(!genreId.isBlank() && !genreId.equals("0")) {
 			id = Long.parseLong(genreId);
 		}
 		if(pageable.getSort().isUnsorted()) {
 			pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("title"));
 		}
+		System.out.println("id:"+id);
 		Page<Movie> result = repository.findByGenre(pageable, id);
 		return result.map(movie -> new MovieCardDTO(movie));
 	}
