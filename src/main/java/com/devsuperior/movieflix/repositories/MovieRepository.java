@@ -9,6 +9,6 @@ import com.devsuperior.movieflix.entities.Movie;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
-	@Query(value = "SELECT m FROM Movie m WHERE m.genre.id = :genreId")
+	@Query(value = "SELECT m FROM Movie m WHERE (:genreId IS NULL OR m.genre.id = :genreId)")
 	Page<Movie> findByGenre(Pageable pageable, Long genreId);
 }

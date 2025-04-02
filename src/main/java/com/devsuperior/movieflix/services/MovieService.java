@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,14 @@ public class MovieService {
 	
 	@Transactional(readOnly = true)
 	public Page<MovieCardDTO> findByGenre(Pageable pageable, String genreId){
-		Page<Movie> result = repository.findByGenre(pageable, Long.parseLong(genreId));
+		Long id = null;
+		if(!genreId.isBlank()) {
+			id = Long.parseLong(genreId);
+		}
+		if(pageable.getSort().isUnsorted()) {
+			pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("title"));
+		}
+		Page<Movie> result = repository.findByGenre(pageable, id);
 		return result.map(movie -> new MovieCardDTO(movie));
 	}
 }
